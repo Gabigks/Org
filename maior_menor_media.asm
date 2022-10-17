@@ -1,6 +1,7 @@
 	.data
-Maior:	.space
-Menor:	.space
+Print1:	.string "O maior valor é: "
+Print2:	.string "O menor valor é: "
+Print3:	.string "A media dos 3 valores é: "
 I:	.word	3
 Cont:	.word	0
 
@@ -11,28 +12,46 @@ Cont:	.word	0
 	la	t0, I
 	lw 	s2, 0(t0)
 	
-volta:	beq	s1, s2, fim_laco
+volta:	beq	s1, s2, f_laco
 	li	a7, 5
 	ecall
+	add	s5, s5, a0
 	beq 	s1, zero, fst
-	lw	t1, 0(s3)
-	blt	t1, a0, maior
-	lw	t2, 0(s4)
-	blt	a0, t2	menor
+	blt	s3, a0, maior
+	blt	a0, s4	menor
 	
-maior:	sw	a0, 0(s3)
+maior:	mv	s3, a0
 	addi	s1, s1, 1
 	j volta
 
-menor:	sw	a0, 0(s4)
+menor:	mv	s4, a0
 	addi	s1, s1, 1
 	j volta
 	
-fst:	la	s3, Maior
-	sw 	a0, 0(s3)
-	la	s4, Menor
-	sw 	a0, 0(s4)
+fst:	mv	s3, a0
+	mv	s4, a0
 	addi	s1, s1, 1
 	j	volta
 
-fim_laco:
+f_laco:	li	a7, 4
+	la	a0, Print1
+	ecall
+	li	a7, 1
+	mv	a0, s3
+	ecall
+	
+	li	a7, 4
+	la	a0, Print2
+	ecall
+	li	a7, 1
+	mv	a0, s4
+	ecall
+	
+	div	s5, s5, s2
+	
+	li	a7, 4
+	la	a0, Print3
+	ecall
+	li	a7, 1
+	mv	a0, s5
+	ecall
